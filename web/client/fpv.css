@@ -1,0 +1,10 @@
+.video-output {
+  display: block;
+  width: 800px;
+  height: 600px;
+  background-color: rgb(157, 255, 0);
+}
+
+#stream {
+  transform: scale(-1, -1);
+}

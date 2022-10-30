@@ -8,6 +8,7 @@
 #include "src/parsebytes.h"
 #include "time.h"
 #include <ESPmDNS.h>
+#include "movement.h"
 
 
 /* This sketch is a extension/expansion/reork of the 'official' ESP32 Camera example
@@ -35,6 +36,7 @@
  * an accesspoint called "ESP32-CAM-CONNECT" (password: "InsecurePassword")
  *
  */
+
 
 // Primary config, or defaults.
 #if __has_include("myconfig.h")
@@ -640,6 +642,11 @@ void setup() {
     Serial.print("Base Release: ");
     Serial.println(baseVersion);
     Serial.println();
+
+    pinMode(PIN_A1, OUTPUT);
+    pinMode(PIN_A2, OUTPUT);
+    pinMode(PIN_B1, OUTPUT);
+    pinMode(PIN_B2, OUTPUT);
 
     // Warn if no PSRAM is detected (typically user error with board selection in the IDE)
     if(!psramFound()){

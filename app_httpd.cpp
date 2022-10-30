@@ -20,6 +20,7 @@
 #include <Arduino.h>
 #include <WiFi.h>
 
+#include "movement.h"
 #include "index_ov2640.h"
 #include "index_ov3660.h"
 #include "index_other.h"
@@ -172,6 +173,54 @@ void serialDump() {
     }
     Serial.println();
     return;
+}
+
+void resetMotorPins(){
+    digitalWrite(PIN_A1, LOW);
+    digitalWrite(PIN_B1, LOW);
+    digitalWrite(PIN_A2, LOW);
+    digitalWrite(PIN_B2, LOW);
+}
+
+void movementForward(int time){
+    resetMotorPins();
+
+    digitalWrite(PIN_A1, HIGH);
+    digitalWrite(PIN_B1, HIGH);
+    delay(time);
+
+    resetMotorPins();
+}
+
+void movementBackward(int time){
+    resetMotorPins();
+
+    digitalWrite(PIN_A2, HIGH);
+    digitalWrite(PIN_B2, HIGH);
+    delay(time);
+
+    resetMotorPins();
+}
+
+void movementRight(int time){
+    resetMotorPins();
+
+    digitalWrite(PIN_A1, HIGH);
+    digitalWrite(PIN_B2, HIGH);
+    delay(time);
+
+    resetMotorPins();
+}
+
+
+void movementLeft(int time){
+    resetMotorPins();
+
+    digitalWrite(PIN_A2, HIGH);
+    digitalWrite(PIN_B1, HIGH);
+    delay(time);
+
+    resetMotorPins();
 }
 
 static esp_err_t capture_handler(httpd_req_t *req){
@@ -426,6 +475,18 @@ static esp_err_t cmd_handler(httpd_req_t *req){
           delay(150);
           Serial.print('.');
         }
+    }
+    else if(!strcmp(variable, "move_forward")){
+        movementForward(val);
+    }
+    else if(!strcmp(variable, "move_backward")){
+        movementBackward(val);
+    }
+    else if(!strcmp(variable, "move_right")){
+        movementRight(val);
+    }
+    else if(!strcmp(variable, "move_left")){
+        movementLeft(val);
     }
     else {
         res = -1;

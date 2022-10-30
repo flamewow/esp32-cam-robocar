@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>FPV</title>
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="./fpv.css" />
+  </head>
+
+  <body>
+    <img id="stream" src="/stream" alt="video feed" />
+    <div>
+      <input
+        type="range"
+        id="lamp"
+        min="0"
+        max="100"
+        value="0"
+        step="1"
+        class="lamp"
+      />
+      <label for="lamp">Lamp</label>
+    </div>
+  </body>
+  <script src="./fpv.js"></script>
+</html>
