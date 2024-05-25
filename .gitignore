@@ -6,3 +6,5 @@ myconfig.h
 .pio
 .vscode
 web/node_modules
+.DS_Store
+build
