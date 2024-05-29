@@ -31,33 +31,28 @@ const Keys2Cmd = {
   [Keys.turboBack]: "move_backward",
 };
 
+let controlLocked = false;
 addEventListener("keypress", async (e) => {
   const key = e.code;
   console.log(key);
 
-  if (turboKeys.includes(key)) {
-    throttledSendMoveRequestTurbo(key, TURBO_TIME_CONSTANT);
-  } else if (key === Keys.leap) {
-    throttledSendMoveRequestLeap(key, LEAP_TIME_CONSTANT);
-  } else {
-    throttledSendMoveRequest(key, TIME_CONSTANT);
+  if (controlLocked) {
+    return;
   }
+
+  controlLocked = true;
+
+  let time = TIME_CONSTANT;
+  if (turboKeys.includes(key)) {
+    time = TURBO_TIME_CONSTANT;
+  } else if (key === Keys.leap) {
+    time = LEAP_TIME_CONSTANT;
+  }
+
+  await sendMoveRequest(key, time);
+
+  controlLocked = false;
 });
-
-const throttledSendMoveRequest = _.throttle(
-  (key, time) => sendMoveRequest(key, time),
-  TIME_CONSTANT + TIME_DELTA
-);
-
-const throttledSendMoveRequestTurbo = _.throttle(
-  (key, time) => sendMoveRequest(key, time),
-  TURBO_TIME_CONSTANT + TIME_DELTA
-);
-
-const throttledSendMoveRequestLeap = _.throttle(
-  (key, time) => sendMoveRequest(key, time),
-  LEAP_TIME_CONSTANT + TIME_DELTA
-);
 
 async function sendMoveRequest(key, time) {
   const command = Keys2Cmd[key];
