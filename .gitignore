@@ -5,6 +5,7 @@ myconfig.h
 .gcc-flags.json
 .pio
 .vscode
-web/node_modules
+webserver-js/node_modules
 .DS_Store
 build
+.idea
