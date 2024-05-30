@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"embed"
 	"fmt"
 	"io/fs"
@@ -8,6 +9,7 @@ import (
 	"net/http"
 	"os"
 	"robocar-webserver/src/modules/basicAuth"
+	"robocar-webserver/src/modules/ngrokTunnel"
 
 	"github.com/joho/godotenv"
 	"robocar-webserver/src/modules/proxy"
@@ -39,10 +41,20 @@ func main() {
 
 	http.HandleFunc("/", basicAuth.Middleware(fileServer.ServeHTTP))
 
-	fmt.Println("Started listening at http://0.0.0.0:4000")
-	err = http.ListenAndServe(":4000", nil)
+	if os.Getenv("NGROK_ENABLED") == "true" {
+		ngrokListener, err := ngrokTunnel.CreateTunnel(context.Background())
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		log.Println("Ingress established at:", ngrokListener.URL())
+		err = http.Serve(ngrokListener, nil)
+	} else {
+		log.Println("Ingress established at: http://localhost:4000")
+		err = http.ListenAndServe(":4000", nil)
+	}
+
 	if err != nil {
 		log.Fatal(err)
 	}
-
 }
