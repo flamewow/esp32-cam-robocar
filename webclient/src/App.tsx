@@ -33,10 +33,6 @@ function App() {
       <div className="streamContainer">
         <img id="stream" src={STREAM_URL} alt="video feed" />
       </div>
-      {/*<div className="controlsContainer">*/}
-      {/*  <button id="start" className="controlButton">Left</button>*/}
-      {/*  <button id="start" className="controlButton">Right</button>*/}
-      {/*</div>*/}
     </div>
   );
 }

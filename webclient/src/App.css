@@ -8,13 +8,24 @@
   height: 100%;
   display: flex;
   justify-content: center;
-}
+  align-self: start;
 
+  flex-wrap: wrap;
+
+  padding: 1px;
+}
 
 #stream {
   max-width: 100%;
-  height: auto;
-  padding: 5px;
+  max-height: 100%;
+  padding: 1px;
+
+  object-fit: contain;
+  object-position: center top;
+
+  /*debug*/
+  /*border: 1px solid red;*/
+  /*border-radius: 20px;*/
 }
 
 .controlsContainer {

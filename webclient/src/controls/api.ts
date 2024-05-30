@@ -1,3 +1,5 @@
+import { BASE_URL_CTL } from "../config.ts";
+
 export type MoveCommand =
   | "move_forward"
   | "move_left"
@@ -5,7 +7,7 @@ export type MoveCommand =
   | "move_backward";
 
 async function sendMoveCommand(command: MoveCommand, time: number) {
-  const url = `/ctl/control?var=${command}&val=${time}`;
+  const url = `${BASE_URL_CTL}/ctl/control?var=${command}&val=${time}`;
   await fetch(url, { method: "GET" });
 }
 

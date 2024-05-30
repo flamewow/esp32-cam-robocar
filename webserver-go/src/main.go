@@ -8,6 +8,9 @@ import (
 	"net/http"
 	"net/http/httputil"
 	"net/url"
+	"os"
+
+	"github.com/joho/godotenv"
 )
 
 func NewProxy(targetHost string) (*httputil.ReverseProxy, error) {
@@ -31,7 +34,12 @@ func Assets() (fs.FS, error) {
 }
 
 func main() {
-	localIP := "192.168.1.71"
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+
+	robocarIp := os.Getenv("ROBOCAR_IP")
 
 	//// Basic authentication middleware
 	//auth := func(handler http.Handler) http.Handler {
@@ -46,8 +54,8 @@ func main() {
 	//	})
 	//}
 
-	streamProxy, _ := NewProxy(fmt.Sprintf("http://%s:81", localIP))
-	ctlProxy, _ := NewProxy(fmt.Sprintf("http://%s:80", localIP))
+	streamProxy, _ := NewProxy(fmt.Sprintf("http://%s:81", robocarIp))
+	ctlProxy, _ := NewProxy(fmt.Sprintf("http://%s:80", robocarIp))
 
 	assets, _ := Assets()
 	fileServer := http.FileServer(http.FS(assets))
@@ -58,7 +66,7 @@ func main() {
 	http.Handle("/", fileServer)
 
 	fmt.Println("Started listening at http://0.0.0.0:4000")
-	err := http.ListenAndServe(":4000", nil)
+	err = http.ListenAndServe(":4000", nil)
 	if err != nil {
 		log.Fatal(err)
 	}
