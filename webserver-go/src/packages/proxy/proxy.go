@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"net/http/httputil"
 	"net/url"
-	"robocar-webserver/src/modules/basicAuth"
+	"robocar-webserver/src/packages/basicAuth"
 )
 
 func NewProxy(targetHost string) (*httputil.ReverseProxy, error) {

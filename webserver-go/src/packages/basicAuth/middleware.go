@@ -2,20 +2,22 @@ package basicAuth
 
 import (
 	"net/http"
-	"os"
+	"robocar-webserver/src/packages/appConfig"
 )
+
+var _config = appConfig.Load()
 
 func Middleware(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		authEnabled := os.Getenv("AUTH_ENABLED")
+		authEnabled := _config.AuthEnabled
 
-		if authEnabled != "TRUE" {
+		if !authEnabled {
 			next.ServeHTTP(w, r)
 			return
 		}
 
 		user, pass, ok := r.BasicAuth()
-		if !ok || user != os.Getenv("AUTH_USER") || pass != os.Getenv("AUTH_PASSWORD") {
+		if !ok || user != _config.AuthUser || pass != _config.AuthPassword {
 			w.Header().Set("WWW-Authenticate", `Basic realm="Restricted"`)
 			w.WriteHeader(http.StatusUnauthorized)
 			return

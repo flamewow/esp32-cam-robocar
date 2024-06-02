@@ -5,6 +5,7 @@ go 1.22.0
 require github.com/joho/godotenv v1.5.1
 
 require (
+	github.com/caarlos0/env/v11 v11.0.1 // indirect
 	github.com/go-stack/stack v1.8.1 // indirect
 	github.com/inconshreveable/log15 v3.0.0-testing.3+incompatible // indirect
 	github.com/inconshreveable/log15/v3 v3.0.0-testing.5 // indirect

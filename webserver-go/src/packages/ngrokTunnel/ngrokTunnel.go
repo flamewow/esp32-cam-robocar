@@ -4,14 +4,16 @@ import (
 	"context"
 	"golang.ngrok.com/ngrok"
 	"golang.ngrok.com/ngrok/config"
-	"os"
+	"robocar-webserver/src/packages/appConfig"
 )
+
+var _config = appConfig.Load()
 
 func CreateTunnel(ctx context.Context) (ngrok.Tunnel, error) {
 	return ngrok.Listen(ctx,
 		config.HTTPEndpoint(
-			config.WithDomain(os.Getenv("NGROK_DOMAIN")),
+			config.WithDomain(_config.NgrokDomain),
 		),
-		ngrok.WithAuthtokenFromEnv(),
+		ngrok.WithAuthtoken(_config.NgrokAuthToken),
 	)
 }

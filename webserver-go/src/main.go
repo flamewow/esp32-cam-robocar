@@ -7,12 +7,10 @@ import (
 	"io/fs"
 	"log"
 	"net/http"
-	"os"
-	"robocar-webserver/src/modules/basicAuth"
-	"robocar-webserver/src/modules/ngrokTunnel"
-
-	"github.com/joho/godotenv"
-	"robocar-webserver/src/modules/proxy"
+	"robocar-webserver/src/packages/appConfig"
+	"robocar-webserver/src/packages/basicAuth"
+	"robocar-webserver/src/packages/ngrokTunnel"
+	"robocar-webserver/src/packages/proxy"
 )
 
 //go:embed all:static
@@ -23,15 +21,11 @@ func Assets() (fs.FS, error) {
 }
 
 func main() {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
-	}
+	var err error
+	_config := appConfig.Init()
 
-	robocarIp := os.Getenv("ROBOCAR_IP")
-
-	streamProxy, _ := proxy.NewProxy(fmt.Sprintf("http://%s:81", robocarIp))
-	ctlProxy, _ := proxy.NewProxy(fmt.Sprintf("http://%s:80", robocarIp))
+	streamProxy, _ := proxy.NewProxy(fmt.Sprintf("http://%s:81", _config.RobocarIp))
+	ctlProxy, _ := proxy.NewProxy(fmt.Sprintf("http://%s:80", _config.RobocarIp))
 
 	assets, _ := Assets()
 	fileServer := http.FileServer(http.FS(assets))
@@ -41,7 +35,7 @@ func main() {
 
 	http.HandleFunc("/", basicAuth.Middleware(fileServer.ServeHTTP))
 
-	if os.Getenv("NGROK_ENABLED") == "true" {
+	if _config.NgrokEnabled {
 		ngrokListener, err := ngrokTunnel.CreateTunnel(context.Background())
 		if err != nil {
 			log.Fatal(err)
