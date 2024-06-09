@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"embed"
-	"fmt"
 	"io/fs"
 	"log"
 	"net/http"
@@ -11,6 +10,7 @@ import (
 	"robocar-webserver/src/packages/basicAuth"
 	"robocar-webserver/src/packages/ngrokTunnel"
 	"robocar-webserver/src/packages/proxy"
+	"robocar-webserver/src/packages/streaming"
 )
 
 //go:embed all:static
@@ -24,14 +24,15 @@ func main() {
 	var err error
 	_config := appConfig.Init()
 
-	streamProxy, _ := proxy.NewProxy(fmt.Sprintf("http://%s:81", _config.RobocarIp))
-	ctlProxy, _ := proxy.NewProxy(fmt.Sprintf("http://%s:80", _config.RobocarIp))
+	ctlProxy, _ := proxy.NewProxy(_config.RobocarCtrUrl)
 
 	assets, _ := Assets()
 	fileServer := http.FileServer(http.FS(assets))
 
-	proxy.HandleReverseProxy("/ctl/", ctlProxy)
-	proxy.HandleReverseProxy("/stream/", streamProxy)
+	proxy.Register("/ctl/", ctlProxy)
+
+	streamHandler := streaming.MakeMultiplexedStreamHandler()
+	http.HandleFunc("/stream", streamHandler)
 
 	http.HandleFunc("/", basicAuth.Middleware(fileServer.ServeHTTP))
 

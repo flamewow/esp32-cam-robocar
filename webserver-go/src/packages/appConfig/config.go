@@ -8,10 +8,11 @@ import (
 )
 
 type Config struct {
-	RobocarIp      string `env:"ROBOCAR_IP" envDefault:"localhost"`
-	NgrokEnabled   bool   `env:"NGROK_ENABLED" envDefault:"false"`
-	NgrokDomain    string `env:"NGROK_DOMAIN"`
-	NgrokAuthToken string `env:"NGROK_AUTH_TOKEN"`
+	RobocarCtrUrl    string `env:"ROBOCAR_CTL_URL"`
+	RobocarStreamUrl string `env:"ROBOCAR_STREAM_URL"`
+	NgrokEnabled     bool   `env:"NGROK_ENABLED" envDefault:"false"`
+	NgrokDomain      string `env:"NGROK_DOMAIN"`
+	NgrokAuthToken   string `env:"NGROK_AUTH_TOKEN"`
 
 	AuthEnabled  bool   `env:"AUTH_ENABLED" envDefault:"false"`
 	AuthUser     string `env:"AUTH_USER"`
@@ -28,7 +29,7 @@ func Init() *Config {
 		log.Println("Error loading .env file")
 	}
 
-	AppConfig, err := env.ParseAs[Config]()
+	AppConfig, err = env.ParseAs[Config]()
 
 	if err != nil {
 		panic(fmt.Errorf("failed to parse appConfig: %v", err))

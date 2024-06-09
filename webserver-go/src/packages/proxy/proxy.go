@@ -16,6 +16,6 @@ func NewProxy(targetHost string) (*httputil.ReverseProxy, error) {
 	return httputil.NewSingleHostReverseProxy(targetUrl), nil
 }
 
-func HandleReverseProxy(prefix string, proxy *httputil.ReverseProxy) {
+func Register(prefix string, proxy *httputil.ReverseProxy) {
 	http.HandleFunc(prefix, basicAuth.Middleware(http.StripPrefix(prefix, proxy).ServeHTTP))
 }
