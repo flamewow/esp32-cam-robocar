@@ -1,9 +1,9 @@
 import "./App.css";
 import "./controls";
 import { STREAM_URL } from "./config.ts";
-import { useSwipe } from "./controls/touch.tsx";
+import { directionToCommand, useSwipe } from "./controls/touch.ts";
 import { useEffect } from "react";
-import { sendMoveCmd } from "./controls/api.ts";
+import { sendMoveCommand } from "./controls/sendMoveCommand.ts";
 
 function App() {
   const swipe = useSwipe();
@@ -11,21 +11,11 @@ function App() {
   useEffect(() => {
     const { direction, distance } = swipe;
 
-    if (distance < 150) {
-      console.log(`Slight swipe ${direction}`);
-    }
+    if (!direction || !distance) return;
 
-    if (distance > 150) {
-      console.log(`Strong swipe ${direction}`);
-    }
-    const directionToCommand = {
-      up: "move_forward",
-      down: "move_backward",
-      left: "move_left",
-      right: "move_right",
-    };
+    console.log(`Swipe ${direction} ${distance}`);
 
-    sendMoveCmd(directionToCommand[direction], distance * 5);
+    sendMoveCommand(directionToCommand[direction], distance * 5);
   }, [swipe]);
 
   return (

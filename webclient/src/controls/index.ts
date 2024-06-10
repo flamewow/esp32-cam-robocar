@@ -1,2 +1,2 @@
-import "./api.ts";
+import "./sendMoveCommand.ts";
 import "./keyboard.ts";

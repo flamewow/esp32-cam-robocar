@@ -1,4 +1,4 @@
-// export const BASE_URL_CTL = `http://localhost:4000`;
+console.log(`Config loaded:\n\n${JSON.stringify(import.meta.env, null, 2)}`);
 
-export const BASE_URL_CTL = ``;
-export const STREAM_URL = `${BASE_URL_CTL}/stream`;
+export const STREAM_BE_BASE_URL = import.meta.env.VITE_STREAM_BE_BASE_URL;
+export const STREAM_URL = `${STREAM_BE_BASE_URL}/stream`;

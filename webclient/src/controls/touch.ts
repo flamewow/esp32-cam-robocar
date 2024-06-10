@@ -1,6 +1,16 @@
 import { useEffect, useState } from "react";
+import { MoveCommand } from "./sendMoveCommand.ts";
 
-function absDistance(x, y) {
+type Direction = "up" | "down" | "left" | "right";
+
+export const directionToCommand: Record<Direction, MoveCommand> = {
+  up: "move_forward",
+  down: "move_backward",
+  left: "move_left",
+  right: "move_right",
+};
+
+function absDistance(x: number, y: number) {
   const xSquared = Math.pow(x, 2);
   const ySquared = Math.pow(y, 2);
 
@@ -9,10 +19,7 @@ function absDistance(x, y) {
   return Math.sqrt(sumOfSquares);
 }
 
-function calcDirection(
-  xDiff: number,
-  yDiff: number,
-): "up" | "down" | "left" | "right" {
+function calcDirection(xDiff: number, yDiff: number): Direction {
   if (Math.abs(xDiff) > Math.abs(yDiff)) {
     return xDiff < 0 ? "right" : "left";
   } else {
@@ -32,7 +39,7 @@ export const useSwipe = () => {
     },
   };
 
-  const setTouches = (nextState) => {
+  const setTouches = (nextState: { touchstart: any; touchmove: any }) => {
     touches.touchstart = nextState.touchstart;
     touches.touchmove = nextState.touchmove;
   };

@@ -1,4 +1,4 @@
-import {MoveCommand, sendMoveCmd} from "./api.ts";
+import { MoveCommand, sendMoveCommand } from "./sendMoveCommand.ts";
 
 const TIME_CONSTANT = 50;
 const LEAP_TIME_CONSTANT = 500;
@@ -32,7 +32,6 @@ const keysMoveCommandMap: Record<string, MoveCommand> = {
   [Keyboard.turboBack]: "move_backward",
 };
 
-
 addEventListener("keypress", async (e) => {
   const key = e.code;
 
@@ -44,6 +43,5 @@ addEventListener("keypress", async (e) => {
     time = LEAP_TIME_CONSTANT;
   }
 
-  await sendMoveCmd(keysMoveCommandMap[key], time);
+  await sendMoveCommand(keysMoveCommandMap[key], time);
 });
-
