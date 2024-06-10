@@ -8,12 +8,17 @@
   align-content: center;
 }
 
+.streamContainer {
+  max-width: 100%;
+  max-height: 100%;
+}
+
 #stream {
   max-width: 100%;
   max-height: 100dvh;
 
-  object-fit: contain;
-  object-position: center top;
+  object-fit: cover;
+
   border-radius: 3%;
 }
 
